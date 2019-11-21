@@ -32,16 +32,32 @@ class App extends React.Component {
       imageUrl:'',
       box:{},
       route:'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user:{
+        email:'',
+        id: '',
+        name: '',
+        entries:0,
+        joined: ''
+      }
     }
   }
 
-  componentDidMount(){
-    fetch('http://localhost:3001/')
-    .then(response => response.json())
-    .then(console.log)
-  }
+  //componentDidMount(){
+    //fetch('http://localhost:3001/')
+    //.then(response => response.json())
+    //.then(console.log)
+  //}
 
+  loadUser = (data) =>{
+    this.setState({user:{
+        id:data.id,
+        name:data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+    }})
+  }
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('input_image');
@@ -94,7 +110,7 @@ class App extends React.Component {
         :(
           this.state.route === 'signin' 
           ? <Signin onRouteChange={this.onRouteChange}/>
-          : <Register onRouteChange={this.onRouteChange}/>
+          : <Register loadUser = {this.loadUser} onRouteChange = {this.onRouteChange}/>
          )
         }
       </div>
